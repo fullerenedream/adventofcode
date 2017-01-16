@@ -18,12 +18,11 @@ var input = fs.readFileSync("./input.txt", "utf-8");
 // var input = fs.readFileSync("./testInput.txt", "utf-8"); // TESTING ONLY
 // var input = fs.readFileSync("./testInput2.txt", "utf-8"); // TESTING ONLY
 
-// console.log(input);
-
 // split input into an array where each line of input is an array element
 var allLinesArray = input.split("\n")
 
-// remove empty element at end of array - it was a newline that was auto-added at end of file
+/* remove empty element at end of array
+it was a newline that is auto-added at end of file */
 allLinesArray.pop();
 
 // get message length from length of first element in array
@@ -38,32 +37,23 @@ var messageArray = new Array(messageLength);
 for (i = 0; i < messageArray.length; i++) {
   messageArray[i] = [];
 }
-console.log(messageArray);
 
 for (i = 0; i < allLinesArray.length; i++) {
   // console.log(allLinesArray[i]);
 
   // split each line into its own array
   var currentLineArray  = allLinesArray[i].split('');
-  console.log('line ' + i + ': ' + currentLineArray);
-
+  // console.log('line ' + i + ': ' + currentLineArray);
   for (j = 0; j < currentLineArray.length; j++) {
-    console.log(currentLineArray[j]);
+    // console.log(currentLineArray[j]);
     // push each character onto its corresponding array in messageArray
     messageArray[j].push(currentLineArray[j]);
   }
 }
 
-// // test print messageArray
-// for (i = 0; i < messageArray.length; i++) {
-//   console.log('messageArray[' + i + ']:' + messageArray[i]);
-//   console.log('messageArray[' + i + '].length:' + messageArray[i].length);
-// }
-
-// console.log('allLinesArray.length:' + allLinesArray.length);
-
+// find the frequency of each letter in an array of letters
+// returns an object with letters as properties and frequencies as values
 function getLetterFrequencies(letterCandidatesArray) {
-  // count frequency of each letter in array
   var letterFrequencies = {};
   for (var i = 0; i < letterCandidatesArray.length; i++) {
     var letter = letterCandidatesArray[i];
@@ -77,57 +67,56 @@ function getLetterFrequencies(letterCandidatesArray) {
   return letterFrequencies;
 }
 
-function logLetterFrequencies(letterFrequencies) {
-  for (var letter in letterFrequencies) {
-    console.log('frequency of ' + letter + " = " + letterFrequencies[letter]);
-  }
-}
-
+// find the letter with highest frequency from letterFrequencies object
 function getMostFrequentLetter(letterFrequencies) {
   var maxFrequency = 0;
   var mostFrequentLetter = '';
+
   for (var letter in letterFrequencies) {
-    console.log('letter: ' + letter);
+    // console.log('letter: ' + letter);
     if (letterFrequencies[letter] > maxFrequency) {
       maxFrequency = letterFrequencies[letter];
-      console.log('maxFrequency: ' + maxFrequency);
+      // console.log('maxFrequency: ' + maxFrequency);
       mostFrequentLetter = letter;
-      console.log('mostFrequentLetter: ' + mostFrequentLetter);
+      // console.log('mostFrequentLetter: ' + mostFrequentLetter);
     }
   }
   return mostFrequentLetter;
 }
 
+// find the letter with lowest frequency from letterFrequencies object
 function getLeastFrequentLetter(letterFrequencies) {
   var minFrequency = 1000000;
   var leastFrequentLetter = '';
+
   for (var letter in letterFrequencies) {
-    console.log('letter: ' + letter);
+    // console.log('letter: ' + letter);
     if (letterFrequencies[letter] < minFrequency) {
       minFrequency = letterFrequencies[letter];
-      console.log('minFrequency: ' + minFrequency);
+      // console.log('minFrequency: ' + minFrequency);
       leastFrequentLetter = letter;
-      console.log('leastFrequentLetter: ' + leastFrequentLetter);
+      // console.log('leastFrequentLetter: ' + leastFrequentLetter);
     }
   }
   return leastFrequentLetter;
 }
 
+/* construct error-corrected message
+from highest- or lowest-frequency letters in each position */
 function getMessageByFrequency(highOrLow) {
   var correctedMessage = '';
   var correctedMessageArray = [];
 
   for (var i = 0; i < messageArray.length; i++) {
-    console.log('Frequencies for position ' + i + ':');
+    // console.log('Frequencies for position ' + i + ':');
     var letterFrequencies = getLetterFrequencies(messageArray[i]);
-    // logLetterFrequencies(letterFrequencies);
     if (highOrLow == 'high') {
       correctedMessageArray.push(getMostFrequentLetter(letterFrequencies));
     }
     else if (highOrLow == 'low') {
       correctedMessageArray.push(getLeastFrequentLetter(letterFrequencies));
     }
-    console.log('correctedMessageArray: ' + correctedMessageArray);
+    // console.log('correctedMessageArray: ' + correctedMessageArray);
   }
 
   correctedMessage = correctedMessageArray.join('');
