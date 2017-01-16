@@ -14,8 +14,9 @@
 
 
 var fs = require("fs");
-// var input = fs.readFileSync("./input.txt", "utf-8");
-var input = fs.readFileSync("./testInput.txt", "utf-8"); // TESTING ONLY
+var input = fs.readFileSync("./input.txt", "utf-8");
+// var input = fs.readFileSync("./testInput.txt", "utf-8"); // TESTING ONLY
+// var input = fs.readFileSync("./testInput2.txt", "utf-8"); // TESTING ONLY
 
 // console.log(input);
 
@@ -97,15 +98,43 @@ function getMostFrequentLetter(letterFrequencies) {
   return mostFrequentLetter;
 }
 
-var correctedMessageArray = [];
-
-for (var i = 0; i < messageArray.length; i++) {
-  console.log('Frequencies for position ' + i + ':');
-  var letterFrequencies = getLetterFrequencies(messageArray[i]);
-  // logLetterFrequencies(letterFrequencies);
-  correctedMessageArray.push(getMostFrequentLetter(letterFrequencies));
-  console.log('correctedMessageArray: ' + correctedMessageArray);
+function getLeastFrequentLetter(letterFrequencies) {
+  var minFrequency = 1000000;
+  var leastFrequentLetter = '';
+  for (var letter in letterFrequencies) {
+    console.log('letter: ' + letter);
+    if (letterFrequencies[letter] < minFrequency) {
+      minFrequency = letterFrequencies[letter];
+      console.log('minFrequency: ' + minFrequency);
+      leastFrequentLetter = letter;
+      console.log('leastFrequentLetter: ' + leastFrequentLetter);
+    }
+  }
+  return leastFrequentLetter;
 }
 
-var correctedMessageString = correctedMessageArray.join('');
-console.log('correctedMessageString: ' + correctedMessageString);
+function getMessageByFrequency(highOrLow) {
+  var correctedMessage = '';
+  var correctedMessageArray = [];
+
+  for (var i = 0; i < messageArray.length; i++) {
+    console.log('Frequencies for position ' + i + ':');
+    var letterFrequencies = getLetterFrequencies(messageArray[i]);
+    // logLetterFrequencies(letterFrequencies);
+    if (highOrLow == 'high') {
+      correctedMessageArray.push(getMostFrequentLetter(letterFrequencies));
+    }
+    else if (highOrLow == 'low') {
+      correctedMessageArray.push(getLeastFrequentLetter(letterFrequencies));
+    }
+    console.log('correctedMessageArray: ' + correctedMessageArray);
+  }
+
+  correctedMessage = correctedMessageArray.join('');
+  // console.log('correctedMessage: ' + correctedMessage);
+  return correctedMessage;
+}
+
+console.log('Part 1 answer - message by high frequency method: ' + getMessageByFrequency('high'));
+console.log('Part 2 answer - message by low frequency method: ' + getMessageByFrequency('low'));
+
